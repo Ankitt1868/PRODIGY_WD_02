@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe Web</title>
+    <style>
+      *{
+      margin: 0%;
+      padding: 0%;
+      box-sizing: border-box;
+      }
+      .wrapper{
+        height: 100vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background-image: linear-gradient(red,blue);
+        background-image: linear-gradient( to right, red, blue);
+        background-image: linear-gradient(to bottom, red, blue);
+        background-image: linear-gradient(to bottom right , red, blue);
+      } 
+        body{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+      .col{
+        height: 130px;
+        width: 110%;
+        border: 2px solid;
+        text-align: center;
+        font-weight: bold;
+        font-size: 50px;
+        cursor: pointer;
+        padding-top: 15px;
+        }
+      .row{
+        display:flex;
+        width: 100%;
+        }
+      .container{
+        position: absolute;
+        top:50%;
+        left:50%;
+        transform: translate(-50%,-50%);
+        border: 0px solid;
+        height: 640px;
+        width: 800px;
+       }
+       button{
+        height: 50px;
+        width: 100%;
+        margin: 10px 0px;
+        cursor: pointer;
+        border:none;
+        background-color: rgb(249, 107, 56);
+       }
+       .grid{
+        width: 100%;
+        border: 0px solid;
+       }
+       h2{
+        color: rgb(8, 8, 202);
+       }
+       h1{
+        font-size: 40px;
+        text-align: center;
+       }
+       @media (max-width:900px){
+        body{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+       .col{
+        height: 110px;
+        width: 100%;
+        border: 1px solid;
+        text-align: center;
+        font-weight: bold;
+        font-size: 55px;
+        cursor: pointer;
+        padding:25px 0px;
+  
+       }
+       .row{
+        display:flex;
+        width: 100%;
+       }
+       .container{
+        position: absolute;
+        top:37%;
+        left:55%;
+        transform: translate(-60%,-60%);
+        border: 0px solid;
+        height: 450px;
+        width: 250px;
+       }
+       button{
+        height: 80px;
+        width: 100%;
+        margin: 10px 0px;
+        cursor: pointer;
+        border:none;
+        background-color: rgb(15, 30, 30);
+        font-size: 40px;
+        color: rgb(84, 1, 1);
+       }
+       .grid{
+        width: 100%;
+        border: 0px solid;
+       }
+       h2{
+        color: rgba(0, 37, 158, 0.644);
+        font-size: 40px;
+       }
+       h1{
+        font-size: 35px;
+        text-align: center;
+       }
+       }
+    </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="container">
+        <h1 ><font style="color:red;">TIC</font>-<font style="color:blue;">TAC</font>
+            -<font style=" color:yellow;">TOE</font></h1>
+        <div class="grid">
+            <div class="row">
+                <div  onclick="handleClick(this)" class="col" id="0"></div>
+                <div onclick="handleClick(this)" class="col" id="1"></div>
+                <div onclick="handleClick(this)" class="col" id="2"></div>
+            </div>
+            <div class="row">  
+                <div onclick="handleClick(this)" class="col" id="3"></div>
+                <div onclick="handleClick(this)" class="col" id="4"></div>
+                <div onclick="handleClick(this)" class="col" id="5"></div>
+            </div>
+            <div class="row">  
+                <div onclick="handleClick(this)" class="col" id="6"></div>
+                <div onclick="handleClick(this)" class="col" id="7"></div>
+                <div onclick="handleClick(this)" class="col" id="8"></div>
+            </div>
+        </div>
+        <h2></h2>
+        <button onclick="reset11()">RESET</button>
+        
+    </div>
+    <script>
+   let currentPlayer = "X";
+let arr = Array(9).fill(null);
+let winner=0;
+function checkWinner() {
+  if (
+    (arr[0] !== null && arr[0] == arr[1] && arr[1] == arr[2]) ||
+    (arr[3] !== null && arr[3] == arr[4] && arr[4] == arr[5]) ||
+    (arr[6] !== null && arr[6] == arr[7] && arr[7] == arr[8]) ||
+    (arr[0] !== null && arr[0] == arr[3] && arr[3] == arr[6]) ||
+    (arr[1] !== null && arr[1] == arr[4] && arr[4] == arr[7]) ||
+    (arr[2] !== null && arr[2] == arr[5] && arr[5] == arr[8]) ||
+    (arr[0] !== null && arr[0] == arr[4] && arr[4] == arr[8]) ||
+    (arr[2] !== null && arr[2] == arr[4] && arr[4] == arr[6])
+  ) {
+   //document.write("Winner is "+currentPlayer);
+   document.getElementsByTagName("h2")[0].innerText="Winner is "+currentPlayer;
+   winner=1;
+   let audio1=new Audio("./sound/win.wav");
+   audio1.play();     
+    return;
+  }
+/*let i=0;
+
+  for(i;i<arr.length;i++){
+    if(arr[i]==null){
+        break;
+    }
+  }
+  if (i==arr.length) {
+    document.write(`Draw!!`); 
+  }
+    */
+   if(!arr.some(e=>e==null)){
+   document.getElementsByTagName("h2")[0].innerText="Draw!!";
+   let audio=new Audio("./sound/draw.mp3");
+   audio.play();    
+   return;
+   }
+}
+
+function handleClick(el) {
+  const id = Number(el.id);
+  if (arr[id] !== null) return;
+  if(winner==1)return;  
+  arr[id] = currentPlayer;
+  el.innerText = currentPlayer;
+  checkWinner();
+  currentPlayer = currentPlayer === "X" ? "O" : "X";
+ 
+}
+function reset11()
+{ 
+    document.location.href="index.html";
+}    
+</script>
+</div>
+
+</body>
+</html>
